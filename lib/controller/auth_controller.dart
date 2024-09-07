@@ -1,5 +1,7 @@
 import 'package:chatme/services/auth_services.dart';
 import 'package:chatme/utils/fullscreen_loader.dart';
+import 'package:elegant_notification/elegant_notification.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,28 +30,32 @@ class AuthController extends GetxController {
   }
 
   // register
-  void register(
-      {required String email,
-      password,
-      confirmPassword,
-      required GlobalKey<FormState> formKey}) async {
+  void register({
+    required String email,
+    required String name,
+    required String password,
+    required String confirmPassword,
+    required GlobalKey<FormState> formKey,
+  }) async {
     try {
-      FullscreenLoader.showFullscreenLoader();
-
       if (!formKey.currentState!.validate()) {
         return;
       }
+      FullscreenLoader.showFullscreenLoader();
+
       if (password != confirmPassword) {
         Get.snackbar('Incorrect password', 'Passwords do not match');
         return;
       }
 
-      await authService.signUpUser(email, password);
+      await authService.signUpUser(
+          name: name, email: email, password: password);
       FullscreenLoader.hideFullscreenLoader();
     } catch (e) {
       FullscreenLoader.hideFullscreenLoader();
       if (e.toString() == 'email-already-in-use') {
-        Get.snackbar('Email in use', 'Email already in use');
+        ElegantNotification.error(
+            description: Text("E-mail provided is already in use"));
       }
       printInfo(info: e.toString());
     }
@@ -59,5 +65,10 @@ class AuthController extends GetxController {
   void logout() {
     authService.signOutUser();
     Get.back();
+  }
+
+  // get current user
+  User? getUser() {
+    return authService.getCurrentUser();
   }
 }

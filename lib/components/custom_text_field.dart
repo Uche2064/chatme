@@ -5,15 +5,17 @@ class CustomTextField extends StatelessWidget {
   CustomTextField(
       {super.key,
       this.hintText,
-      required this.validator,
+      this.validator,
       required this.obscureText,
       this.controller,
+      this.focusNode,
       this.keyboardType});
 
   String? hintText;
   bool obscureText;
   TextEditingController? controller;
   TextInputType? keyboardType;
+  FocusNode? focusNode;
   String? Function(String? value)? validator;
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class CustomTextField extends StatelessWidget {
       keyboardType: keyboardType,
       controller: controller,
       obscureText: obscureText,
+      focusNode: focusNode,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       cursorColor: color.primary,
@@ -55,7 +58,7 @@ class CustomTextField extends StatelessWidget {
         hintStyle: GoogleFonts.poppins(
           color: color.primary,
         ),
-        fillColor: color.surface,
+        fillColor: Colors.white54,
         filled: true,
       ),
     );

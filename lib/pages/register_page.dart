@@ -14,6 +14,7 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
   final TextEditingController _confirmPwdController = TextEditingController();
+  final TextEditingController _name = TextEditingController();
   AuthController authController = Get.put(AuthController());
   GlobalKey<FormState> registerKey = GlobalKey<FormState>();
   @override
@@ -51,7 +52,16 @@ class RegisterPage extends StatelessWidget {
                     child: Column(
                       children: [
                         CustomTextField(
-                          hintText: "Email",
+                          hintText: "Name",
+                          controller: _name,
+                          obscureText: false,
+                          validator: (value) =>
+                              Validators.validateField(value!),
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        const Gap(10),
+                        CustomTextField(
+                          hintText: "E-mail",
                           controller: _emailController,
                           obscureText: false,
                           validator: (value) =>
@@ -90,6 +100,7 @@ class RegisterPage extends StatelessWidget {
                   onTap: () => authController.register(
                       email: _emailController.text,
                       password: _pwdController.text,
+                      name: _name.text,
                       confirmPassword: _confirmPwdController.text,
                       formKey: registerKey),
                 ),
