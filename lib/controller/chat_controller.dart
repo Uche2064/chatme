@@ -1,3 +1,4 @@
+import 'package:chatme/models/chat_room.dart';
 import 'package:chatme/models/message.dart';
 import 'package:chatme/models/users.dart';
 import 'package:chatme/services/chat_services.dart';
@@ -8,7 +9,7 @@ class ChatController extends GetxController {
   var users = <Users>[].obs;
   late String currentUserId, otherUserId;
   RxList<Message> messageList = <Message>[].obs;
-
+  Rx<ChatRoom?> chatRoom = ChatRoom().obs;
   @override
   void onInit() {
     super.onInit();
@@ -17,6 +18,13 @@ class ChatController extends GetxController {
     });
   }
 
+
+  void setChatRoom({required String currentUserId, required String otherUserId}) async {
+    List<String> ids = [currentUserId, otherUserId];
+    ids.sort();
+    String chatRoomId = ids.join('_');
+    chatRoom.value = await _chatServices.getChatRoomBy(chatRoomId);
+  } 
 
   void initializeMessageList(
       {required String currentUserId, otherUserId}) async {

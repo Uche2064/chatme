@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChatPage extends StatefulWidget {
-  ChatPage({super.key, required this.receiverName, required this.receiverId});
+  const ChatPage(
+      {super.key, required this.receiverName, required this.receiverId});
   final String receiverName;
   final String receiverId;
 
@@ -29,7 +30,7 @@ class _ChatPageState extends State<ChatPage> {
   void scrollDown() {
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 100),
       curve: Curves.fastOutSlowIn,
     );
   }
@@ -47,7 +48,6 @@ class _ChatPageState extends State<ChatPage> {
 
     scrollDown();
   }
-  // clear the text editing controller
 
   @override
   void initState() {

@@ -40,6 +40,15 @@ class HomePage extends StatelessWidget {
   Widget _buildUserListItem(Users userData) {
     // display all users except current user
     if (userData.email != authController.getUser()!.email) {
+      // get current chatRoom
+      
+
+      // navigate to chat page with selected user's details
+      Get.to(() => ChatPage(
+            receiverName: userData.name!,
+            receiverId: userData.uid!,
+          ));
+
       return UserTile(
         text: userData.name!,
         onTap: () {

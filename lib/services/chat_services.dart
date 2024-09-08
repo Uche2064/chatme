@@ -1,7 +1,9 @@
+import 'package:chatme/models/chat_room.dart';
 import 'package:chatme/models/message.dart';
 import 'package:chatme/models/users.dart';
 import 'package:chatme/services/auth_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
 class ChatServices {
   // firestore instance
@@ -15,6 +17,16 @@ class ChatServices {
         return Users.fromJson(user.data());
       }).toList();
     });
+  }
+
+  Future<ChatRoom?> getChatRoomBy(String uid) async {
+    var doc = await _firestore.collection('ChatRoom').doc(uid).get();
+
+    if (doc.exists) {
+      return ChatRoom.fromJson(doc.data()!);
+    } else {
+      return null;
+    }
   }
 
   // send message
@@ -43,6 +55,11 @@ class ChatServices {
         .doc(chatroomId)
         .collection('messages')
         .add(newMessage.toJson());
+
+    ChatRoom newChatRoom = ChatRoom(uid: chatroomId, lastMessage: newMessage);
+    printInfo(info: chatroomId);
+    printInfo(info: newChatRoom.toJson().toString());
+    _firestore.collection('ChatRoom').doc(chatroomId).set(newChatRoom.toJson());
   }
 
   // get message
